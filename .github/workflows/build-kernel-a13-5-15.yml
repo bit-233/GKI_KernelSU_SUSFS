@@ -1,8 +1,8 @@
 name: 编译内核a13-5-15
 
 permissions:
-  contents: write
-  actions: write
+  contents: write  # Allow writing to repository contents (for pushing tags)
+  actions: write   # Allows triggering actions
   
 on:
   workflow_dispatch:
@@ -45,7 +45,6 @@ on:
         required: true
         type: boolean
         default: false
-      # 1. 补全输入参数
       BBG:
         description: '是否启用内核层面阻止对关键分区/设备节点的非法写入(LSM)？'
         required: true
@@ -59,7 +58,6 @@ on:
 jobs:
 
   build-kernel-a13-5-15:
-    # 2. 保持引用 kernel-a13-5.15.yml 不变
     uses: ./.github/workflows/kernel-a13-5.15.yml
     secrets: inherit
     with:
@@ -69,9 +67,7 @@ jobs:
       version: ${{ inputs.version }}
       use_zram: ${{ inputs.use_zram }}
       use_kpm: ${{ inputs.use_kpm }}
-      # 3. 传递 BBG 参数
       BBG: ${{ inputs.BBG }}
-      
   get-ksu-manager:
     if: ${{ inputs.get_manager }}
     uses: ./.github/workflows/get-manager.yml
